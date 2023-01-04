@@ -2,9 +2,9 @@ from django.db import models
 
 
 class Categories(models.TextChoices):
-    DK = "drinks"
-    FD = "foods"
-    DS = "disserts"
+    drinks = "drinks"
+    foods = "foods"
+    disserts = "disserts"
 
 
 class Menu(models.Model):
@@ -22,7 +22,7 @@ class Menu(models.Model):
     user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
-        related_name="user"
+        related_name="items"
     )
 
     def __repr__(self) -> str:
