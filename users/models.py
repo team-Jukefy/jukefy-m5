@@ -1,3 +1,8 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# Create your models here.
+
+class User(AbstractUser):
+    username = models.CharField(blank=True, default=None, null=True)
+    email = models.EmailField(unique=True)
+    is_staff = models.BooleanField(default=True)
