@@ -12,3 +12,4 @@ class OrderSerializer(serializers.ModelSerializer):
             "item_id",
             "table_id",
         ]
+        depth = 1,
