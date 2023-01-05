@@ -7,15 +7,15 @@ from .serializers import OrderSerializer
 
 
 class OrderView(generics.ListAPIView):
-    #authentication_classes = [JWTAuthentication]
-    #permission_classes = [IsAuthenticatedOrReadOnly]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
 class DetailOrderView(generics.DestroyAPIView):
-    #authentication_classes = [JWTAuthentication]
-    #permission_classes = [IsAuthenticatedOrReadOnly]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
