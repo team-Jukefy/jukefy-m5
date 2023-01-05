@@ -1,23 +1,15 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-import uuid
+from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    id = models.UUIDField(
-        default=uuid.uuid4,
-        primary_key=True,
-        editable=False,
-    )
-    username = models.CharField(
-        null=True,
-        max_length=150,
+    name = models.CharField(max_length=50)
+    contact = models.CharField(max_length=20)
+    email = models.EmailField(
+        max_length=127,
         unique=True,
-    )
-    name = models.CharField(max_length=150)
-    email = models.EmailField(unique=True, max_length=150)
-    is_staff = models.BooleanField(default=True)
-    contact = models.CharField(
-        max_length=150,
-        null=True,
+        error_messages={
+            "unique": "This field must be unique.",
+        },
     )
