@@ -46,6 +46,9 @@ THIRD_PARTY_APPS = [
 
 MY_APPS = [
     "users",
+    "menu",
+    "tables",
+    "orders",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
