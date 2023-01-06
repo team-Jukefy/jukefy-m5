@@ -1,8 +1,12 @@
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView
+from rest_framework.views import Request
+from rest_framework.mixins import UpdateModelMixin
 from .models import User
 from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.contrib.auth.hashers import make_password
+from .permissions import isOwnerOrAdmin
 
 
 class UserView(ListCreateAPIView):
@@ -11,3 +15,18 @@ class UserView(ListCreateAPIView):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class UserDetailsView(RetrieveDestroyAPIView, UpdateModelMixin):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated, isOwnerOrAdmin]
+
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def patch(self, request: Request, *args, **kwargs):
+        if request.data.get("password"):
+            request.data["password"] = make_password(request.data.get("password"))
+
+        return self.partial_update(request, *args, **kwargs)
