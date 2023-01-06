@@ -7,7 +7,7 @@ class TableStatus(models.TextChoices):
     occupied = "occupied"
 
 
-class Menu(models.Model):
+class Table(models.Model):
     class Meta:
         ordering = ["id"]
 
