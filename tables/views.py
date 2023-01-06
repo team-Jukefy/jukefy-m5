@@ -6,7 +6,7 @@ from .models import Table
 from .serializers import TableSerializer
 
 
-class TableView(generics.ListAPIView):
+class TableView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
