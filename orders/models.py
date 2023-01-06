@@ -27,7 +27,7 @@ class Order(models.Model):
     )
 
     table = models.ForeignKey(
-        "tables.Table",
+        "tables.Menu",
         on_delete=models.CASCADE,
         related_name="table_orders"
     )
