@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     name = models.CharField(max_length=50)
     contact = models.CharField(max_length=20)
+    is_staff = models.BooleanField(default=True)
     email = models.EmailField(
         max_length=127,
         unique=True,

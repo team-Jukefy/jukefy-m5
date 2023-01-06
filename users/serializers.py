@@ -10,13 +10,20 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "password",
             "contact",
+            "username",
             "name",
             "is_staff",
             "is_superuser",
         ]
         read_only_fields = [
             "id",
-            "is_staff",
             "is_superuser",
         ]
-        extra_kwargs = {"password": {"write_only": True}}
+        extra_kwargs = {
+            "password": {"write_only": True},
+            "username": {"required": False},
+            "is_staff": {"required": False, "default": True},
+        }
+
+    def create(self, validated_data: dict) -> User:
+        return User.objects.create_user(**validated_data)
