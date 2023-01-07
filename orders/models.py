@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
 
 
 class PaymentStatus(models.TextChoices):
@@ -11,25 +11,20 @@ class Order(models.Model):
     class Meta:
         ordering = ["id"]
 
-    quantity = models.IntegerField(validators=[
-            MaxValueValidator(99),
-            MinValueValidator(1)
-        ])
+    quantity = models.IntegerField(
+        validators=[MaxValueValidator(99), MinValueValidator(1)]
+    )
     payment = models.CharField(
         max_length=7,
         choices=PaymentStatus.choices,
     )
 
     item = models.ForeignKey(
-        "menu.Menu",
-        on_delete=models.CASCADE,
-        related_name="item_orders"
+        "menu.Menu", on_delete=models.CASCADE, related_name="item_orders"
     )
 
     table = models.ForeignKey(
-        "tables.Menu",
-        on_delete=models.CASCADE,
-        related_name="table_orders"
+        "tables.Table", on_delete=models.CASCADE, related_name="table_orders"
     )
 
     def __repr__(self) -> str:
