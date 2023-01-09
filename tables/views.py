@@ -5,11 +5,14 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import AccessToken
-
+from rest_framework.views import status
 from users.models import User
 
 from .models import Table
 from .serializers import TableSerializer
+from orders.serializers import OrderSerializer
+from orders.models import Order
+from menu.models import Menu
 
 
 class TableView(generics.ListCreateAPIView):
@@ -45,3 +48,22 @@ class TableDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Table.objects.all()
 
     lookup_url_kwarg = "pk"
+
+
+class TableOrderView(generics.ListCreateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+    def create(self, request, *args, **kwargs):
+       
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
