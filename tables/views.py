@@ -9,7 +9,7 @@ from rest_framework_simplejwt.tokens import AccessToken
 from users.models import User
 
 from .models import Table
-from .serializers import TableSerializer
+from .serializers import TableSerializer, MusicSerializer
 
 
 class TableView(generics.ListCreateAPIView):
@@ -45,3 +45,11 @@ class TableDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Table.objects.all()
 
     lookup_url_kwarg = "pk"
+
+
+class MusicView(generics.ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    serializer_class = MusicSerializer
+    queryset = Table.objects.all()

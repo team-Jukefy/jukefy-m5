@@ -12,7 +12,5 @@ urlpatterns = [
     # path(
     #     "tables/<int:pk>/close",
     # ),
-    # path(
-    #     "tables/<int:pk>/music",
-    # ),
+    path("tables/music/", views.MusicView.as_view()),
 ]
