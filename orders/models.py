@@ -17,10 +17,11 @@ class Order(models.Model):
     payment = models.CharField(
         max_length=7,
         choices=PaymentStatus.choices,
+        default=PaymentStatus.pending,
     )
 
     item = models.ForeignKey(
-        "menu.Menu", on_delete=models.CASCADE, related_name="item_orders"
+        "menu.Menu", on_delete=models.CASCADE, related_name="item_orders",editable=True
     )
 
     table = models.ForeignKey(

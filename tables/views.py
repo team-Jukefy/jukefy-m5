@@ -1,4 +1,3 @@
-import ipdb
 from django.utils.crypto import get_random_string
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -12,7 +11,6 @@ from .models import Table
 from .serializers import TableSerializer
 from orders.serializers import OrderSerializer
 from orders.models import Order
-from menu.models import Menu
 
 
 class TableView(generics.ListCreateAPIView):
@@ -58,12 +56,14 @@ class TableOrderView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
 
     def create(self, request, *args, **kwargs):
-       
         serializer = self.get_serializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
-        
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
+    
+    def perform_create(self, serializer):
+        serializer.save(table_id=self.request.user.table.id)
+

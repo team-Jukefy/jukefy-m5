@@ -1,28 +1,25 @@
 from rest_framework import serializers
 
 from .models import Order
-import ipdb
+
+
+class OrderListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        items = [Order(**item) for item in validated_data]
+        return Order.objects.bulk_create(items)
+
 
 class OrderSerializer(serializers.ModelSerializer):
-
-
-
-    def create(self, validated_data) -> Order:
-
-        ipdb.set_trace()
-        Order.objects.bulk_create(validated_data)
-        return super().create(validated_data)
-     
     class Meta:
         model = Order
         fields = [
             "id",
             "quantity",
             "payment",
-            "item_id",
-            "table_id",
+            "item",
         ]
-        extra_kwargs = {"payment":{"required": False}}
-        depth = 1
-    
-  
+        extra_kwargs = {
+            "payment": {"required": False},
+        }
+
+        list_serializer_class = OrderListSerializer
