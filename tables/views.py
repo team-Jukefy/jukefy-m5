@@ -11,6 +11,7 @@ from .models import Table
 from .serializers import TableSerializer
 from orders.serializers import OrderSerializer
 from orders.models import Order
+import ipdb
 
 
 class TableView(generics.ListCreateAPIView):
@@ -54,6 +55,7 @@ class TableOrderView(generics.ListCreateAPIView):
 
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
+    lookup_url_kwarg = "pk"
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, many=True)
@@ -68,4 +70,4 @@ class TableOrderView(generics.ListCreateAPIView):
         serializer.save(table_id=self.request.user.table.id)
 
     def filter_queryset(self, queryset):
-        return Order.objects.filter(table_id=self.request.user.table.id)
+        return Order.objects.filter(table_id=self.kwargs["pk"])
