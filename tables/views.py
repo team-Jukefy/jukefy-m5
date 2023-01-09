@@ -17,11 +17,13 @@ class TableView(generics.ListCreateAPIView):
     serializer_class = TableSerializer
 
     def get_anon_user(self):
-        return User.objects.create(
+        self.user = User.objects.create(
             username=get_random_string(8),
             email=get_random_string(8),
             password=get_random_string(8),
         )
+
+        return self.user
 
     def perform_create(self, serializer):
         serializer.save(user=self.get_anon_user())
