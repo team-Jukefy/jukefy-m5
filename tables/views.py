@@ -1,15 +1,17 @@
-import ipdb
 from django.utils.crypto import get_random_string
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import AccessToken
-
+from rest_framework.views import status
 from users.models import User
 
 from .models import Table
 from .serializers import TableSerializer
+from orders.serializers import OrderSerializer
+from orders.models import Order
+import ipdb
 
 
 class TableView(generics.ListCreateAPIView):
@@ -45,3 +47,27 @@ class TableDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Table.objects.all()
 
     lookup_url_kwarg = "pk"
+
+
+class TableOrderView(generics.ListCreateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    lookup_url_kwarg = "pk"
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
+
+    def perform_create(self, serializer):
+        serializer.save(table_id=self.request.user.table.id)
+
+    def filter_queryset(self, queryset):
+        return Order.objects.filter(table_id=self.kwargs["pk"])

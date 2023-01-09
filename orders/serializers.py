@@ -2,6 +2,13 @@ from rest_framework import serializers
 
 from .models import Order
 
+
+class OrderListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        items = [Order(**item) for item in validated_data]
+        return Order.objects.bulk_create(items)
+
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -9,7 +16,10 @@ class OrderSerializer(serializers.ModelSerializer):
             "id",
             "quantity",
             "payment",
-            "item_id",
-            "table_id",
+            "item",
         ]
-        depth = 1,
+        extra_kwargs = {
+            "payment": {"required": False},
+        }
+
+        list_serializer_class = OrderListSerializer

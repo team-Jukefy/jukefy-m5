@@ -15,4 +15,5 @@ urlpatterns = [
     # path(
     #     "tables/<int:pk>/music",
     # ),
+    path("tables/<int:pk>/orders/", views.TableOrderView.as_view()),
 ]
