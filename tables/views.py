@@ -63,7 +63,9 @@ class TableOrderView(generics.ListCreateAPIView):
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
-    
+
     def perform_create(self, serializer):
         serializer.save(table_id=self.request.user.table.id)
 
+    def filter_queryset(self, queryset):
+        return Order.objects.filter(table_id=self.request.user.table.id)
