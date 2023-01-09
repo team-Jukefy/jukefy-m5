@@ -16,14 +16,15 @@ class TableView(generics.ListCreateAPIView):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
 
-    user = User.objects.create(
-        username=get_random_string(8),
-        email=get_random_string(8),
-        password=get_random_string(8),
-    )
+    def get_anon_user(self):
+        return User.objects.create(
+            username=get_random_string(8),
+            email=get_random_string(8),
+            password=get_random_string(8),
+        )
 
     def perform_create(self, serializer):
-        serializer.save(user=self.user)
+        serializer.save(user=self.get_anon_user())
 
     def create(self, request, *args, **kwargs):
         super().create(request, *args, **kwargs)
