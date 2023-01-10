@@ -12,6 +12,3 @@ class TableSerializer(serializers.ModelSerializer):
             "status",
             "musics_count",
         ]
-
-    def create(self, validated_data):
-        return Table.objects.create(**validated_data)
