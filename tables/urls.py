@@ -19,6 +19,6 @@ urlpatterns = [
     # ),
     path("tables/<int:pk>/orders/", views.TableOrderView.as_view()),
     path(
-        "tables/<int:table_id>/orders/<int:pk>", order_views.DetailOrderView.as_view()
+        "tables/<int:table_id>/orders/<int:pk>", order_views.OrderDetailView.as_view()
     ),
 ]
