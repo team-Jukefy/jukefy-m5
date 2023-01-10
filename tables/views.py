@@ -1,10 +1,12 @@
 from django.utils.crypto import get_random_string
+from django.shortcuts import get_object_or_404
+
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import AccessToken
-from rest_framework.views import status
+from rest_framework.views import status, APIView, Request, Response
 from users.models import User
 
 from .models import Table
@@ -71,3 +73,17 @@ class TableOrderView(generics.ListCreateAPIView):
 
     def filter_queryset(self, queryset):
         return Order.objects.filter(table_id=self.kwargs["pk"])
+
+
+class TableCloseView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def patch(self, request: Request, pk: int) -> Response:
+        table = get_object_or_404(Table, id=pk)
+        table.status = "available"
+        table.save()
+        User.objects.get(id=table.user.id).delete()
+        Order.objects.filter(table_id=pk).update(payment="paid")
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

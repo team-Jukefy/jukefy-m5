@@ -10,10 +10,8 @@ urlpatterns = [
     #     "tables/<int:pk>/orders/<int:order_id>",
     # ),
     # path(
-    #     "tables/<int:pk>/close",
-    # ),
-    # path(
     #     "tables/<int:pk>/music",
     # ),
     path("tables/<int:pk>/orders/", views.TableOrderView.as_view()),
+    path("tables/<int:pk>/close/", views.TableCloseView.as_view()),
 ]
