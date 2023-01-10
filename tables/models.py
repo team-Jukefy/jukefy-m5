@@ -17,7 +17,7 @@ class Table(models.Model):
     status = models.CharField(
         max_length=9,
         choices=TableStatus.choices,
-        default=TableStatus.available,
+        default=TableStatus.occupied,
     )
     musics_count = models.IntegerField(
         validators=[
