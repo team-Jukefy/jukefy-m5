@@ -21,7 +21,7 @@ class Order(models.Model):
     )
 
     item = models.ForeignKey(
-        "menu.Menu", on_delete=models.CASCADE, related_name="item_orders",editable=True
+        "menu.Menu", on_delete=models.CASCADE, related_name="item_orders"
     )
 
     table = models.ForeignKey(
