@@ -12,12 +12,7 @@ class OrderListSerializer(serializers.ListSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = [
-            "id",
-            "quantity",
-            "payment",
-            "item",
-        ]
+        fields = ["id", "quantity", "payment", "item", "table"]
         extra_kwargs = {
             "payment": {"required": False},
         }
