@@ -1,19 +1,19 @@
-from django.utils.crypto import get_random_string
+import ipdb
 from django.shortcuts import get_object_or_404
-
+from django.utils.crypto import get_random_string
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework.views import APIView, Request, Response, status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import AccessToken
-from rest_framework.views import status, APIView, Request, Response
+
+from orders.models import Order
+from orders.serializers import OrderSerializer
 from users.models import User
 
 from .models import Table
 from .serializers import TableSerializer
-from orders.serializers import OrderSerializer
-from orders.models import Order
-import ipdb
 
 
 class TableView(generics.ListCreateAPIView):
