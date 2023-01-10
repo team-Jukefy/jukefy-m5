@@ -12,7 +12,8 @@ class Table(models.Model):
         ordering = ["id"]
 
     table_number = models.IntegerField(
-        unique=True, validators=[MaxValueValidator(99), MinValueValidator(1)]
+        unique=True,
+        validators=[MaxValueValidator(99), MinValueValidator(1)],
     )
     status = models.CharField(
         max_length=9,
