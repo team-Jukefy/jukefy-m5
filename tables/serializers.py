@@ -1,9 +1,6 @@
 from rest_framework import serializers
 
 from .models import Table
-from users.models import User
-
-import ipdb
 
 
 class TableSerializer(serializers.ModelSerializer):

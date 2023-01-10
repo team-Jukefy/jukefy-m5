@@ -1,11 +1,9 @@
 from django.utils.crypto import get_random_string
-
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
+from rest_framework.views import Response, status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import AccessToken
-from rest_framework.views import status, Response
 from users.models import User
 
 from .models import Table
