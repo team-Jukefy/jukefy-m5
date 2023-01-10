@@ -69,7 +69,7 @@ class TableOrderView(generics.ListCreateAPIView):
         )
 
     def perform_create(self, serializer):
-        serializer.save(table_id=self.request.user.table.id)
+        serializer.save(table_id=self.kwargs["pk"])
 
     def filter_queryset(self, queryset):
         return Order.objects.filter(table_id=self.kwargs["pk"])

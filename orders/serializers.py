@@ -15,6 +15,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ["id", "quantity", "payment", "item", "table"]
         extra_kwargs = {
             "payment": {"required": False},
+            "table": {"required": False}
         }
 
         list_serializer_class = OrderListSerializer
