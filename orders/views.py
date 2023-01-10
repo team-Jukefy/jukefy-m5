@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from tables.permissions import OrderDetailPermission
+from .permissions import OrderDetailPermission
 
 from .models import Order
 from .serializers import OrderSerializer
