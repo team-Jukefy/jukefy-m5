@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
 
 
 class PaymentStatus(models.TextChoices):
@@ -27,7 +27,7 @@ class Order(models.Model):
     )
 
     table = models.ForeignKey(
-        "tables.Menu",
+        "tables.Table",
         on_delete=models.CASCADE,
         related_name="table_orders"
     )
