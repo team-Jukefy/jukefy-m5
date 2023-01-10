@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
+DEBUG = os.getenv("DEBUG", False)
 
 ALLOWED_HOSTS = []
 
@@ -102,6 +102,10 @@ WSGI_APPLICATION = "_core.wsgi.application"
 
 DATABASES = {
     "default": {
+    "ENGINE": "django.db.backends.postgresql"
+    },
+    
+    "sqlite3": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
@@ -111,7 +115,8 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 
 if DATABASE_URL:
     db_from_env = dj_database_url.config(
-        default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+        default=DATABASE_URL, conn_max_age=500, ssl_require=True
+    )
     DATABASES['default'].update(db_from_env)
     DEBUG = False
     
