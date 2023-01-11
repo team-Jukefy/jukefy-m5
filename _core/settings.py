@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", False)
+DEBUG = os.getenv("DEBUG", True)
 
 ALLOWED_HOSTS = []
 
@@ -50,7 +50,10 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework", "drf_spectacular"]
+THIRD_PARTY_APPS = [
+    "rest_framework",
+    "drf_spectacular",
+]
 
 MY_APPS = [
     "users",
@@ -98,7 +101,9 @@ WSGI_APPLICATION = "_core.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {"ENGINE": "django.db.backends.postgresql"},
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+    },
     "sqlite3": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
@@ -108,12 +113,13 @@ DATABASES = {
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
-    db_from_env = dj_database_url.config(
-        default=DATABASE_URL, conn_max_age=500, ssl_require=True
-    )
-    DATABASES["default"].update(db_from_env)
+    db_deploy = dj_database_url.config(default=DATABASE_URL)
+    DATABASES["default"].update(db_deploy)
     DEBUG = False
-
+else:
+    DATABASES = {
+        "default": DATABASES["sqlite3"]
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import Response, status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import AccessToken
+from .permissions import TableExists
 from users.models import User
 
 from .models import Table
@@ -15,6 +16,7 @@ from orders.models import Order
 class TableView(generics.ListCreateAPIView):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
+    permission_classes = [TableExists]
 
     def get_anon_user(self):
         self.user = User.objects.create(
@@ -27,6 +29,12 @@ class TableView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.get_anon_user())
+
+    def post(self, request, *args, **kwargs):
+        tables = Table.objects.filter(table_number=request.data["table_number"])
+        if tables:
+            self.check_object_permissions(request, tables)
+        return super().post(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         super().create(request, *args, **kwargs)

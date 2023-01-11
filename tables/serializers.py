@@ -11,7 +11,7 @@ class TableSerializer(serializers.ModelSerializer):
             "table_number",
             "status",
             "musics_count",
-            "user"
+            "user",
         ]
 
 
