@@ -2,7 +2,7 @@ import ipdb
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView, Request, Response, status
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -11,9 +11,11 @@ from rest_framework_simplejwt.tokens import AccessToken
 from orders.models import Order
 from orders.serializers import OrderSerializer
 from users.models import User
+from users.permissions import isOwnerOrAdmin
 
 from .models import Table
-from .serializers import TableSerializer
+from .permissions import TableExists
+from .serializers import MusicSerializer, TableCloseSerializer, TableSerializer
 
 
 class TableView(generics.ListCreateAPIView):
@@ -43,12 +45,20 @@ class TableView(generics.ListCreateAPIView):
 
 class TableDetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     serializer_class = TableSerializer
     queryset = Table.objects.all()
 
     lookup_url_kwarg = "pk"
+
+
+class MusicView(generics.ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    serializer_class = MusicSerializer
+    queryset = Table.objects.all()
 
 
 class TableOrderView(generics.ListCreateAPIView):
@@ -74,16 +84,29 @@ class TableOrderView(generics.ListCreateAPIView):
     def filter_queryset(self, queryset):
         return Order.objects.filter(table_id=self.kwargs["pk"])
 
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
 
-class TableCloseView(APIView):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        total_price = sum(
+            [order["total_item_price"] for order in serializer.data],
+        )
+
+        return Response(
+            {
+                "count": self.paginator.page.paginator.count,
+                "next": self.paginator.get_next_link(),
+                "previous": self.paginator.get_previous_link(),
+                "total_price": total_price,
+                "results": data,
+            }
+        )
+
+
+class TableCloseView(generics.UpdateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def patch(self, request: Request, pk: int) -> Response:
-        table = get_object_or_404(Table, id=pk)
-        table.status = "available"
-        table.save()
-        User.objects.get(id=table.user.id).delete()
-        Order.objects.filter(table_id=pk).update(payment="paid")
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    serializer_class = TableCloseSerializer
+    queryset = Table.objects.all()
