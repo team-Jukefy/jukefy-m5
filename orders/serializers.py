@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
-from .models import Order
 from menu.models import Menu
 from menu.serializers import MenuSerializer
+
+from .models import Order
 
 
 class OrderListSerializer(serializers.ListSerializer):
