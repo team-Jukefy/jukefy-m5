@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from .models import Order
 
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -12,4 +13,4 @@ class OrderSerializer(serializers.ModelSerializer):
             "item_id",
             "table_id",
         ]
-        depth = 1,
+        depth = 1
