@@ -15,7 +15,6 @@ drf-spectacular==0.25.1
 executing==1.2.0
 inflection==0.5.1
 ipdb==0.13.11
-ipython==8.8.0
 jedi==0.18.2
 jsonschema==4.17.3
 matplotlib-inline==0.1.6
