@@ -12,12 +12,12 @@ class Table(models.Model):
         ordering = ["id"]
 
     table_number = models.IntegerField(
-        unique=True, validators=[MaxValueValidator(99), MinValueValidator(1)]
+        validators=[MaxValueValidator(99), MinValueValidator(1)],
     )
     status = models.CharField(
         max_length=9,
         choices=TableStatus.choices,
-        default=TableStatus.available,
+        default=TableStatus.occupied,
     )
     musics_count = models.IntegerField(
         validators=[

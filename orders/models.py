@@ -1,6 +1,9 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from menu.models import Menu
+from tables.models import Table
+
 
 class PaymentStatus(models.TextChoices):
     pending = "pending"
@@ -17,15 +20,16 @@ class Order(models.Model):
     payment = models.CharField(
         max_length=7,
         choices=PaymentStatus.choices,
+        default=PaymentStatus.pending,
     )
 
     item = models.ForeignKey(
-        "menu.Menu", on_delete=models.CASCADE, related_name="item_orders"
+        Menu, on_delete=models.CASCADE, related_name="item_orders"
     )
 
     table = models.ForeignKey(
-        "tables.Table", on_delete=models.CASCADE, related_name="table_orders"
+        Table, on_delete=models.CASCADE, related_name="table_orders"
     )
 
     def __repr__(self) -> str:
-        return f"<Order [{self.id}] - {self.table.table_name}>"
+        return f"<Order [{self.id}] - {self.table.table_number}>"

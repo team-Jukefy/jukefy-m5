@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import Order
+from .permissions import OrderDetailPermission
 from .serializers import OrderSerializer
 
 
@@ -20,9 +21,9 @@ class OrderView(generics.ListAPIView, mixins.DestroyModelMixin):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class OrderDetailView(generics.DestroyAPIView):
+class DetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [OrderDetailPermission]
 
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
