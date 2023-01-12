@@ -117,9 +117,7 @@ if DATABASE_URL:
     DATABASES["default"].update(db_deploy)
     DEBUG = False
 else:
-    DATABASES = {
-        "default": DATABASES["sqlite3"]
-    }
+    DATABASES = {"default": DATABASES["sqlite3"]}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

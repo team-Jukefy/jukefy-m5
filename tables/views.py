@@ -1,7 +1,10 @@
+import ipdb
+from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework.views import Response, status
+from rest_framework.response import Response
+from rest_framework.views import APIView, Request, Response, status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import AccessToken
 
@@ -18,7 +21,6 @@ from .serializers import MusicSerializer, TableCloseSerializer, TableSerializer
 class TableView(generics.ListCreateAPIView):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
-    permission_classes = [TableExists]
 
     def get_anon_user(self):
         self.user = User.objects.create(
@@ -31,12 +33,6 @@ class TableView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.get_anon_user())
-
-    def post(self, request, *args, **kwargs):
-        tables = Table.objects.filter(table_number=request.data["table_number"])
-        if tables:
-            self.check_object_permissions(request, tables)
-        return super().post(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         super().create(request, *args, **kwargs)

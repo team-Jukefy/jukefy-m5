@@ -23,9 +23,7 @@ class Order(models.Model):
         default=PaymentStatus.pending,
     )
 
-    item = models.ForeignKey(
-        Menu, on_delete=models.CASCADE, related_name="item_orders"
-    )
+    item = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name="item_orders")
 
     table = models.ForeignKey(
         Table, on_delete=models.CASCADE, related_name="table_orders"
