@@ -21,7 +21,7 @@ class OrderView(generics.ListAPIView, mixins.DestroyModelMixin):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class DetailView(generics.RetrieveUpdateDestroyAPIView):
+class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [OrderDetailPermission]
 

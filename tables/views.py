@@ -1,6 +1,6 @@
 from django.utils.crypto import get_random_string
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.views import Response, status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import AccessToken
@@ -8,6 +8,7 @@ from rest_framework_simplejwt.tokens import AccessToken
 from orders.models import Order
 from orders.serializers import OrderSerializer
 from users.models import User
+from users.permissions import isOwnerOrAdmin
 
 from .models import Table
 from .permissions import TableExists
@@ -48,7 +49,7 @@ class TableView(generics.ListCreateAPIView):
 
 class TableDetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     serializer_class = TableSerializer
     queryset = Table.objects.all()
